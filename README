@@ -1,0 +1,24 @@
+Balaci Alexandra, 323CD
+
+client.c:
+
+Accepta comenzi de la tastatura si trimite, in functie de comanda, cereri serverului. Se va folosi de variabile globale pentru retinerea cookie-ului primit folosit pentru autentificare si a tokenului pentru accesul la biblioteca de carti. Implementeaza un while infinit care citeste de la tastatura si intra pe ramura respectiva fiecarei comenzi; va inchide clientul la primirea comenzii de "exit". Pentru fiecare comanda citita, va inchide si va deschide conexiunea cu serverul, pentru a asigura parsarea si trimiterea corecta a datelor in ciclu infinit.
+
+-register: ofera prompt utilizatorului pentru introducerea datelor de inregistrare (username si parola). Converteste aceste date intr-un obiect JSON si posteaza cererea pentru inregistrare, apoi returneaza raspunsul serverului. Afiseaza la stdout orice eventuala eroare primita inapoi de la server, sau mesaj de succes in caz contrar.
+
+-login: ofera prompt pentru introducerea datelor de login (username si parola). Converteste aceste date intr-un obiect JSON si posteaza cererea pentru autentificare, apoi returneaza raspunsul serverului. Verifica daca s-a primit eroare de la server si o afiseaza, iar in contrar, parseaza raspunsul primit pentru a extrage cookie-ul ce va fi folosit pentru a valida autentificarea pe toata perioada activa a sesiunii (pana la logout) si afiseaza mesaj de succes.
+
+-enter_library: trimite o cerere de tip "get" catre adresa de acces a librariei, care este validata prin intermediul cookie-ului obtinut in urma autentificarii in cont. Returneaza si parseaza raspunsul serverului. Verifica pentru erori (precum lipsa cookie-ului care demonstreaza ca utilizatorul este autentificat), si, in cazul in care nu exista, parseaza raspunsul serverului pentru a extrage tokenul JWT, ce va fi folosit pe parcursul sesiunii pentru a valida accesul la biblioteca de carti. Afiseaza mesaj de succes daca nu apar erori.
+
+-get_books: trimite o cerere de tip "get" la adresa bibliotecii (folosind tokenul obtinut la "enter_library") si returneaza raspunsul serverului, ce va contine lista de carti care exista pentru utilizatorul care a facut cererea. Se foloseste de tokenul JWT primit la pasul anterior pentru a valida accesul la biblioteca. Afiseaza la stdout otice eroare returnata de server, sau mesaj de succes si lista de obiecte JSON in caz de reusita.
+
+-get_book: ofera prompt pt id-ul cartii cautate. Trimite cerere la adresa cartii din cadrul bibliotecii, foloseste tokenul obtinut la "enter_library", parseaza raspunsul serverului si afiseaza la stdout orice eventuala eroare (precum id inexistent). Returneaza informatii despre carte si un mesaj de succes in caz de reusita.
+
+-add_book: ofera prompt pentru introducerea informatiilor despre carte. Parseaza datele in format JSON si le posteaza la adresa bibliotecii. Foloseste tokenul obtinut la "enter_library". Returneaza si parseaza raspunsul serverului. Afiseaza orice eventuala eroare, sau mesaj de success in caz de reusita.
+
+-delete_book : sterge din baza de date a utilizatorului cartea cu id-ul introdus la stdin. Face get pe adresa bibliotecii si foloseste functia delete.
+
+-logout: verifica utilizatorul sa fie logat si face get la adresa de logout. Afiseaza mesaj de succes in caz de reusita.
+
+requests.c:
+include functiile prin care se vor realiza comenzile de get, post si delete. Foloseste scheletul lab-ului 10, cu modificarea adaugarii headerului de Authorization, prin care se va solicita si extrage tokenul JWT, precum si a functiei de serializare a obiectului JSON in string de caractere.
